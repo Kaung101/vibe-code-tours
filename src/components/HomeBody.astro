@@ -17,29 +17,86 @@ const features = [
 
 const tags = ['#VibeCode', '#AI', '#DEV', '#MCP', '#AGENT', '#SKILL'];
 const highlightTags = new Set(['#VibeCode', '#MCP']);
+
+const stats = [
+  { value: 185, suffix: '+', label: 'Cohort 1 Builders' },
+  { value: 9, suffix: '', label: 'Chapters' },
+  { value: 36, suffix: 'h', label: 'Hands-on Hours' },
+  { value: 0, prefix: '$', suffix: '', label: 'Cost to Join' },
+];
 ---
 
+<style>
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeSlideDown {
+    from { opacity: 0; transform: translateY(-12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes shimmer {
+    0%, 100% { background-position: -200% center; }
+    50% { background-position: 200% center; }
+  }
+
+  .hero-badge { opacity: 0; animation: fadeSlideDown 600ms cubic-bezier(0.16, 1, 0.3, 1) 0ms forwards; }
+  .hero-h1 { opacity: 0; animation: fadeSlideUp 700ms cubic-bezier(0.16, 1, 0.3, 1) 100ms forwards; }
+  .hero-stat { opacity: 0; animation: fadeSlideUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 250ms forwards; }
+  .hero-sub { opacity: 0; animation: fadeSlideUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 350ms forwards; }
+  .hero-btns { opacity: 0; animation: fadeSlideUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 450ms forwards; }
+  .hero-tags { opacity: 0; animation: fadeSlideUp 500ms cubic-bezier(0.16, 1, 0.3, 1) 550ms forwards; }
+
+  .shimmer-text {
+    background-size: 200% auto;
+    animation: shimmer 6s ease-in-out infinite;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
+                transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .cursor-glow {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #f59e0b0a, transparent 70%);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: left 0.3s ease-out, top 0.3s ease-out;
+  }
+</style>
+
 <!-- Hero -->
-<section class="relative overflow-hidden py-20 text-center sm:py-28">
+<section id="hero" class="relative overflow-hidden py-20 text-center sm:py-28">
   <div class="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 h-[400px] w-[600px] rounded-full" style="background: radial-gradient(circle, #f59e0b0d, transparent 70%)"></div>
+  <div id="cursor-glow" class="cursor-glow hidden sm:block" style="left: 50%; top: 50%;"></div>
   <div class="relative mx-auto max-w-3xl px-5 sm:px-6">
-    <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-accent-500/30 bg-accent-500/10 px-4 py-1.5 text-sm font-semibold text-accent-500">
+    <div class="hero-badge mb-6 inline-flex items-center gap-2 rounded-full border border-accent-500/30 bg-accent-500/10 px-4 py-1.5 text-sm font-semibold text-accent-500">
       <span class="h-1.5 w-1.5 rounded-full bg-accent-500 animate-pulse"></span>
       Cohort 1 in progress · Cohort 2 opens October 2026
     </div>
-    <h1 class="text-4xl font-black leading-tight sm:text-6xl" style="background: linear-gradient(135deg, #fff 0%, #f59e0b 80%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+    <h1 class="hero-h1 shimmer-text text-4xl font-black leading-tight sm:text-6xl" style="background: linear-gradient(135deg, #fff 0%, #f59e0b 50%, #fff 80%, #f59e0b 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
       Master AI-First Development
     </h1>
-    <p class="mt-4 text-lg font-bold text-accent-500">{s.heroStat}</p>
-    <p class="mx-auto mt-4 max-w-xl text-lg text-gray-400">{s.heroSub}</p>
-    <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+    <p class="hero-stat mt-4 text-lg font-bold text-accent-500">{s.heroStat}</p>
+    <p class="hero-sub mx-auto mt-4 max-w-xl text-lg text-gray-400">{s.heroSub}</p>
+    <div class="hero-btns mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
       <a href={localizedPath('/apply', locale)} class="btn btn-primary">{s.ctaApply}</a>
       <a href={localizedPath('/curriculum', locale)} class="btn btn-secondary">{s.ctaWork}</a>
     </div>
-    <div class="mt-6 flex flex-wrap justify-center gap-2">
+    <div class="hero-tags mt-6 flex flex-wrap justify-center gap-2">
       {tags.map((tag) => (
         <span class:list={[
-          'rounded-full px-3 py-1 font-mono text-xs font-semibold transition',
+          'rounded-full px-3 py-1 font-mono text-xs font-semibold transition-all duration-200',
           highlightTags.has(tag)
             ? 'border border-accent-500/30 bg-accent-500/10 text-accent-500'
             : 'border border-white/10 bg-white/5 text-gray-500 hover:text-accent-500 hover:border-accent-500/30'
@@ -52,14 +109,14 @@ const highlightTags = new Set(['#VibeCode', '#MCP']);
 </section>
 
 <!-- Features -->
-<section class="mx-auto max-w-5xl px-5 py-12 sm:px-6">
+<section class="reveal mx-auto max-w-5xl px-5 py-12 sm:px-6">
   <p class="section-label">What You'll Master</p>
   <h2 class="mt-2 text-center text-3xl font-extrabold sm:text-4xl">Build with AI, Not Just About AI</h2>
   <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-    {features.map((f) => (
-      <div class="group rounded-xl border border-white/5 bg-surface-card p-6 transition hover:-translate-y-0.5 hover:border-accent-500/20 relative overflow-hidden">
-        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-500/20 to-transparent opacity-0 transition group-hover:opacity-100"></div>
-        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg border border-accent-500/20 bg-accent-500/10 text-xl">{f.icon}</div>
+    {features.map((f, i) => (
+      <div class="reveal group rounded-xl border border-white/5 bg-surface-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent-500/20 relative overflow-hidden" style={`transition-delay: ${i * 80}ms`}>
+        <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-500/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+        <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-lg border border-accent-500/20 bg-accent-500/10 text-xl transition-transform duration-300 group-hover:scale-110">{f.icon}</div>
         <h3 class="text-base font-bold">{f.title}</h3>
         <p class="mt-2 text-sm text-gray-500">{f.desc}</p>
       </div>
@@ -68,12 +125,12 @@ const highlightTags = new Set(['#VibeCode', '#MCP']);
 </section>
 
 <!-- Curriculum Roadmap -->
-<section class="mx-auto max-w-5xl px-5 py-16 sm:px-6">
+<section class="reveal mx-auto max-w-5xl px-5 py-16 sm:px-6">
   <p class="section-label">The Journey</p>
   <h2 class="mt-2 text-center text-3xl font-extrabold sm:text-4xl">9 Chapters · Zero to Ship</h2>
   <div class="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-    {chapters.map((ch) => (
-      <a href={localizedPath(`/curriculum/ch-${ch.num}`, locale)} class="group rounded-xl border border-white/5 bg-surface-card p-5 no-underline transition hover:border-accent-500/20">
+    {chapters.map((ch, i) => (
+      <a href={localizedPath(`/curriculum/ch-${ch.num}`, locale)} class="reveal group rounded-xl border border-white/5 bg-surface-card p-5 no-underline transition-all duration-300 hover:border-accent-500/20 hover:-translate-y-0.5" style={`transition-delay: ${i * 60}ms`}>
         <div class="font-mono text-xs font-bold text-accent-500/70">CH {ch.num}</div>
         <h4 class="mt-1 text-sm font-bold text-white">{ch.title}</h4>
         <p class="mt-1 text-xs text-gray-600">{ch.outcome}</p>
@@ -88,30 +145,24 @@ const highlightTags = new Set(['#VibeCode', '#MCP']);
 </section>
 
 <!-- Social Proof -->
-<section class="mx-auto max-w-4xl px-5 py-12 sm:px-6">
+<section id="stats-section" class="reveal mx-auto max-w-4xl px-5 py-12 sm:px-6">
   <div class="flex flex-wrap justify-center gap-12 rounded-xl border border-white/5 bg-surface-card px-8 py-8 sm:gap-16">
-    <div class="text-center">
-      <div class="text-3xl font-black text-white">185<span class="text-accent-500">+</span></div>
-      <div class="mt-1 text-xs text-gray-500">Cohort 1 Builders</div>
-    </div>
-    <div class="text-center">
-      <div class="text-3xl font-black text-white">9</div>
-      <div class="mt-1 text-xs text-gray-500">Chapters</div>
-    </div>
-    <div class="text-center">
-      <div class="text-3xl font-black text-white">36<span class="text-accent-500">h</span></div>
-      <div class="mt-1 text-xs text-gray-500">Hands-on Hours</div>
-    </div>
-    <div class="text-center">
-      <div class="text-3xl font-black text-white">$0</div>
-      <div class="mt-1 text-xs text-gray-500">Cost to Join</div>
-    </div>
+    {stats.map((s) => (
+      <div class="text-center">
+        <div class="text-3xl font-black text-white">
+          {s.prefix && <span>{s.prefix}</span>}
+          <span class="counter" data-target={s.value}>0</span>
+          {s.suffix && <span class="text-accent-500">{s.suffix}</span>}
+        </div>
+        <div class="mt-1 text-xs text-gray-500">{s.label}</div>
+      </div>
+    ))}
   </div>
 </section>
 
 <!-- Final CTA -->
-<section class="mx-auto max-w-3xl px-5 py-16 sm:px-6">
-  <div class="relative overflow-hidden rounded-2xl border border-accent-500/20 p-12 text-center" style="background: linear-gradient(135deg, #f59e0b0d, #09090b)">
+<section class="reveal mx-auto max-w-3xl px-5 py-16 sm:px-6">
+  <div class="relative overflow-hidden rounded-2xl border border-accent-500/20 p-12 text-center transition-all duration-500 hover:border-accent-500/30" style="background: linear-gradient(135deg, #f59e0b0d, #09090b)">
     <div class="pointer-events-none absolute inset-0" style="background: radial-gradient(circle at center, #f59e0b08, transparent 50%)"></div>
     <h2 class="relative text-3xl font-extrabold">Ready to Vibe Code?</h2>
     <p class="relative mt-3 text-gray-500">Join the next cohort and build with AI, not just about it.</p>
@@ -120,3 +171,55 @@ const highlightTags = new Set(['#VibeCode', '#MCP']);
     </div>
   </div>
 </section>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.counter').forEach(counter => {
+          const target = parseInt((counter as HTMLElement).dataset.target ?? '0', 10);
+          if (target === 0) { counter.textContent = '0'; return; }
+          const duration = 1500;
+          const start = performance.now();
+          const step = (now: number) => {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 4);
+            counter.textContent = Math.round(eased * target).toString();
+            if (progress < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+        });
+        counterObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const statsEl = document.getElementById('stats-section');
+  if (statsEl) counterObserver.observe(statsEl);
+
+  const hero = document.getElementById('hero');
+  const glow = document.getElementById('cursor-glow');
+  if (hero && glow) {
+    hero.addEventListener('mousemove', (e) => {
+      const rect = hero.getBoundingClientRect();
+      (glow as HTMLElement).style.left = (e.clientX - rect.left) + 'px';
+      (glow as HTMLElement).style.top = (e.clientY - rect.top) + 'px';
+    });
+    hero.addEventListener('mouseleave', () => {
+      (glow as HTMLElement).style.left = '50%';
+      (glow as HTMLElement).style.top = '50%';
+    });
+  }
+</script>
