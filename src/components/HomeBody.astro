@@ -129,6 +129,13 @@ const stats = [
     background-size: 200% auto;
     animation: shimmer 6s ease-in-out infinite;
   }
+  /* h1 carries both classes; combine entrance + shimmer so opacity reaches 1
+     (a lone "animation: shimmer" would override the fade and leave it at 0). */
+  .hero-h1.shimmer-text {
+    animation:
+      fadeScaleUp 800ms var(--ease-out) 100ms forwards,
+      shimmer 6s ease-in-out infinite;
+  }
 
   .reveal {
     opacity: 0;
@@ -240,8 +247,19 @@ const stats = [
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(1200px 620px at 50% 6%, transparent, #09090b 72%),
-      linear-gradient(180deg, #09090bcc 0%, #09090b99 42%, #09090b 100%);
+      radial-gradient(
+        820px 460px at 50% 42%,
+        #09090bf2 0%,
+        #09090b80 56%,
+        transparent 80%
+      ),
+      linear-gradient(
+        180deg,
+        #09090bd9 0%,
+        #09090b99 32%,
+        #09090be6 70%,
+        #09090b 100%
+      );
   }
   @keyframes heroDrift {
     from {
@@ -255,6 +273,16 @@ const stats = [
     .hero-mosaic {
       animation: none;
       transform: scale(1.06);
+    }
+    /* show hero content without entrance motion */
+    .hero-badge,
+    .hero-h1,
+    .hero-stat,
+    .hero-sub,
+    .hero-btns,
+    .hero-tags {
+      opacity: 1;
+      animation: none;
     }
   }
 </style>
